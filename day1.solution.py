@@ -18,4 +18,5 @@ with open('day1.input') as f:
         nums = pat.findall(l)
         if nums:
             sum += digit(nums[0]) * 10 + digit(nums[-1])
-            print(nums, sum)
+            # print(nums, sum)
+print(sum)
