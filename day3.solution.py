@@ -1,7 +1,6 @@
 
 import re
 
-sum = 0
 symbols = set()
 with open('day3.input.txt') as f:
     for line in f:
@@ -10,7 +9,7 @@ with open('day3.input.txt') as f:
     f.seek(0)
     lines = f.readlines()
 
-grsum = 0
+sum, grsum = 0, 0
 
 for lnum, line in enumerate(lines):
     syms = re.finditer(r'\*', line)
@@ -34,20 +33,14 @@ for lnum, line in enumerate(lines):
     matches = re.finditer(r'\d+', line)
     for m in matches:
         st, en = m.start(), m.end()
-        if lnum >= 1:
-            prevl = lines[lnum - 1]
-            for i in range(max(0, st - 1), min(en + 1, len(prevl))):
-                if prevl[i] in symbols:
-                    sum += int(m.group())
-                    break
         for i in [max(0, st - 1), min(en, len(line) - 1)]:
             if line[i] in symbols:
                 sum += int(m.group())
                 break
-        if lnum + 1 < len(lines):
-            nextl = lines[lnum + 1]
-            for i in range(max(0, st - 1), min(en + 1, len(nextl))):
-                if nextl[i] in symbols:
+        for adjline in [lines[lnum - 1] if lnum >= 1 else '',
+                        lines[lnum + 1] if lnum + 1 < len(lines) else '']:
+            for i in range(max(0, st - 1), min(en + 1, len(adjline))):
+                if adjline[i] in symbols:
                     sum += int(m.group())
                     break
 
