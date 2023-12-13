@@ -67,6 +67,3 @@ with open('day13.input.txt') as f:
     summ(pattern)
 
 print(sum1, sum2)
-
-
-
