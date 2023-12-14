@@ -1,6 +1,5 @@
 import copy
 
-# with open('foo') as f:
 with open('day14.input.txt') as f:
     grid = f.readlines()
 grid = [list(line.strip()) for line in grid]
