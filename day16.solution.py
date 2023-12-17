@@ -1,3 +1,5 @@
+# BFS is the classic solution to this problem. But I'll solve it using DFS.
+
 from collections import deque, namedtuple
 from enum import Enum
 
