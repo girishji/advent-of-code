@@ -9,20 +9,18 @@ Brick = namedtuple('Brick', 'b e')
 bricks = [Brick(Cube(*(map(int, be.strip().split(',')))), Cube(*(map(int, en.strip().split(','))))) for be, en in bricks]
 
 def get_cubes(br):
-    return [Cube(x, y, z) for x in range(br.b.x, br.e.x + 1) for y in range(br.b.y, br.e.y + 1) for z in range(br.b.z, br.e.z + 1)]
+    rng = lambda idx: range(br.b[idx], br.e[idx] + 1)
+    return [Cube(x, y, z) for x in rng(0) for y in rng(1) for z in rng(2)]
 
 def collapse(brks):
     nbricks = []
     count = 0
-    grid = [[[None for z in range(max(max(br.b.z, br.e.z) for br in bricks) + 2)]
-             for y in range(max(max(br.b.y, br.e.y) for br in bricks) + 1)]
-            for x in range(max(max(br.b.x, br.e.x) for br in bricks) + 1)]
+    maxof = lambda idx: max(max(br.b[idx], br.e[idx]) for br in brks)
+    grid = [[[None for z in range(maxof(2) + 2)] for y in range(maxof(1) + 1)] for x in range(maxof(0) + 1)]
     for br in sorted(brks, key=lambda br: min(br.b.z, br.e.z)):
         fell = False
         while min(br.b.z, br.e.z) > 1 and all(not grid[cb.x][cb.y][cb.z - 1] for cb in get_cubes(br)):
-            beg = Cube(br.b.x, br.b.y, br.b.z - 1)
-            end = Cube(br.e.x, br.e.y, br.e.z - 1)
-            br = Brick(beg, end)
+            br = Brick(Cube(br.b.x, br.b.y, br.b.z - 1), Cube(br.e.x, br.e.y, br.e.z - 1))
             fell = True
         if fell:
             count += 1
