@@ -20,7 +20,7 @@ bool safe(vector<int>& vec) {
 }
 
 int main() {
-    freopen("./day2.input.txt", "r", stdin);
+    freopen("./2.txt", "r", stdin);
     string line;
     int res1 = 0, res2 = 0;
     while(getline(cin, line)) {

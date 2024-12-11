@@ -1,4 +1,4 @@
-with open('./day7.input.txt') as f:
+with open('./7.txt') as f:
     ares = []
     anums = []
     for l in f:

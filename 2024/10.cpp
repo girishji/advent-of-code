@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
     // freopen("./tmp.txt", "r", stdin);
-    freopen("./day10.input.txt", "r", stdin);
+    freopen("./10.txt", "r", stdin);
     vector<string> topo;
     for (string line; getline(cin, line); ) {
         topo.push_back(line);

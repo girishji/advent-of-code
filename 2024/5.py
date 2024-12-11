@@ -12,7 +12,7 @@ def correct_order(pg):
                 return correct_order(pg)
     return int(pg[len(pg) // 2])
 
-with open('day5.input.txt') as f:
+with open('5.txt') as f:
     for l in f:
         n = l.rstrip().split('|')
         if len(n) == 2:

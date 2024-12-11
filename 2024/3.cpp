@@ -3,7 +3,7 @@ using namespace std;
 namespace rng = ranges;
 
 int main() {
-    freopen("./day3.input.txt", "r", stdin);
+    freopen("./3.txt", "r", stdin);
     int res = 0;
     regex pat {R"(mul\((\d{1,3}),(\d{1,3})\))"};
     for(string line; getline(cin, line); ) {
@@ -16,7 +16,7 @@ int main() {
     //
     // Clear EOF state
     cin.clear();
-    freopen("./day3.input.txt", "r", stdin);
+    freopen("./3.txt", "r", stdin);
     res = 0;
     bool enabled = true;
     pat = R"(mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\))";

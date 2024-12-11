@@ -6,7 +6,7 @@ using namespace std;
 bool is_anti_node(const pair<int, int>& p, map<char, vector<pair<int, int>>>& map);
 
 int main() {
-    freopen("./day8.input.txt", "r", stdin);
+    freopen("./8.txt", "r", stdin);
     // freopen("./tmp.txt", "r", stdin);
     vector<string> grid;
     for (string line; getline(cin, line); ) {

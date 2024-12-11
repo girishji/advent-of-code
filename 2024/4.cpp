@@ -2,7 +2,7 @@
 using namespace std;
 
 int main() {
-    freopen("./day4.input.txt", "r", stdin);
+    freopen("./4.txt", "r", stdin);
     vector<string> m;
     for (string line; getline(cin, line);) {
         m.push_back(line);

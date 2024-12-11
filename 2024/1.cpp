@@ -5,7 +5,7 @@ using namespace std;
 namespace rn = ranges;
 
 int main() {
-    freopen("./day1.input.txt", "r", stdin);
+    freopen("./1.txt", "r", stdin);
     vector<int> n1, n2;
     int i1, i2;
     while(cin >> i1 >> i2) {

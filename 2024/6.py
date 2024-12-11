@@ -1,7 +1,7 @@
 from itertools import product
 
 grid = []
-with open('./day6.input.txt') as f:
+with open('./6.txt') as f:
     grid = [list(l.strip()) for l in f]
 for i, j in product(range(len(grid)), range(len(grid[0]))):
     if grid[i][j] == '^':

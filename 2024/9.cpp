@@ -16,7 +16,7 @@ struct block_t {
 
 int main() {
     // freopen("./tmp.txt", "r", stdin);
-    freopen("./day9.input.txt", "r", stdin);
+    freopen("./9.txt", "r", stdin);
     list<block_t> disk;
     int id = 0;
     bool free = false;
