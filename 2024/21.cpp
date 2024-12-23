@@ -5,11 +5,6 @@ using i64 = std::int64_t;
 #define F first
 #define S second
 
-std::ostream& operator<<(std::ostream& os, const std::pair<int, int>& p) {
-    os << '(' << p.first << ", " << p.second << ')';
-    return os;
-}
-
 int main() {
     freopen("./21.txt", "r", stdin);
     vector<string> codes;
@@ -47,24 +42,10 @@ int main() {
     auto pair_seq = [&pmemo, &idx_seq, &npad, &dpad](char fr, char to) {
         string s{fr, to};
         if (!pmemo.contains(s)) {
-            vector<string> paths;
             if (isdigit(fr) || isdigit(to))
-                paths = idx_seq(npad[fr], npad[to], idx{0, 0});
+                pmemo[s] = idx_seq(npad[fr], npad[to], idx{0, 0});
             else
-                paths = idx_seq(dpad[fr], dpad[to], idx{0, 1});
-            // remove zigzag's - reddit hint
-            for (auto it = paths.begin(); it != paths.end(); ) {
-                bool removed{false};
-                for (auto [a, b, c] : *it | rv::adjacent<3>) {
-                    if (a == c && a != b && b != c) {
-                        it = paths.erase(it);
-                        removed = true;
-                        break;
-                    }
-                }
-                if (!removed) it++;
-            }
-            pmemo[s] = paths;
+                pmemo[s] = idx_seq(dpad[fr], dpad[to], idx{0, 1});
         }
         return pmemo[s];
     };
