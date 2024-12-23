@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-using namespace std::string_view_literals;
-namespace rg = std::ranges;
 namespace rv = std::ranges::views;
 using i64 = std::int64_t;
 #define F first
@@ -13,7 +11,6 @@ std::ostream& operator<<(std::ostream& os, const std::pair<int, int>& p) {
 }
 
 int main() {
-    // freopen("./test.txt", "r", stdin);
     freopen("./21.txt", "r", stdin);
     vector<string> codes;
     for (string line; cin >> line; )
@@ -50,18 +47,32 @@ int main() {
     auto pair_seq = [&pmemo, &idx_seq, &npad, &dpad](char fr, char to) {
         string s{fr, to};
         if (!pmemo.contains(s)) {
+            vector<string> paths;
             if (isdigit(fr) || isdigit(to))
-                pmemo[s] = idx_seq(npad[fr], npad[to], idx{0, 0});
+                paths = idx_seq(npad[fr], npad[to], idx{0, 0});
             else
-                pmemo[s] = idx_seq(dpad[fr], dpad[to], idx{0, 1});
+                paths = idx_seq(dpad[fr], dpad[to], idx{0, 1});
+            // remove zigzag's - reddit hint
+            for (auto it = paths.begin(); it != paths.end(); ) {
+                bool removed{false};
+                for (auto [a, b, c] : *it | rv::adjacent<3>) {
+                    if (a == c && a != b && b != c) {
+                        it = paths.erase(it);
+                        removed = true;
+                        break;
+                    }
+                }
+                if (!removed) it++;
+            }
+            pmemo[s] = paths;
         }
         return pmemo[s];
     };
 
-    map<string, string> memo;
+    map<string, vector<string>> smemo;
 
-    auto path_seq = [&memo, &pair_seq](string pathstr) -> string {
-        if (!memo.contains(pathstr)) {
+    auto path_seq = [&smemo, &pair_seq](string pathstr) -> vector<string> {
+        if (!smemo.contains(pathstr)) {
             string s = 'A' + pathstr;
             vector<string> paths{""};
             for (unsigned long i = 0; i < s.length() - 1; i++) {
@@ -72,47 +83,42 @@ int main() {
                 }
                 paths.swap(npaths);
             }
-            auto turns = [](const string& x) {
-                int tcount{};
-                char prev = x[0];
-                for (int i = 1; i < (int)x.length(); i++) {
-                    if (prev != x[i]) {
-                        tcount++;
-                        prev = x[i];
-                    }
-                }
-                return tcount;
-            };
-            rg::sort(paths, [&turns](const string& a, const string& b) {
-                    return turns(a) < turns(b); });
-            memo[pathstr] = rg::min(paths, [](const string& a, const string& b) {
-                    return a.length() < b.length(); });
+            smemo[pathstr] = paths;
         }
-        return memo[pathstr];
+        return smemo[pathstr];
     };
 
-    function<i64(string, int)> minseqlen = [&minseqlen, &path_seq](string seq, int lvl) ->i64 {
-        // cout << seq << " lvl: " << lvl << endl;
-        if (lvl == 0) return seq.length();
-        i64 minlen{};
-        seq.pop_back();
-        for (const auto word : std::views::split(seq, "A"sv)) {
-            string partial(string_view{word});
-            partial += "A";
-            auto path = path_seq(partial);
-            minlen += minseqlen(path, lvl - 1);
+    map<pair<string, int>, i64> memo;
+
+    function<i64(string, int)> dfs = [&dfs, &memo, &path_seq](string sequence, int lvl) ->i64 {
+        if (lvl == 0) return sequence.length();
+        if (sequence == "A") return 1;
+        i64 minlen{numeric_limits<i64>::max()};
+        for (auto seq : path_seq(sequence)) {
+            i64 mlen{};
+            seq.pop_back();
+            for (const auto word : rv::split(seq, "A"sv)) {
+                string partial(string_view{word});
+                partial += "A";
+                pair key{partial, lvl};
+                if (!memo.contains(key)) {
+                    memo[key] = dfs(partial, lvl - 1);
+                }
+                mlen += memo[key];
+            }
+            minlen = min(minlen, mlen);
         }
         return minlen;
     };
 
     i64 complexity{};
     for (const auto& code : codes) {
-        complexity += minseqlen(code, 2 + 1) * stoi(code.substr(0, 3));
+        complexity += dfs(code, 2 + 1) * stoi(code.substr(0, 3));
     }
     cout << complexity << endl;
     complexity = 0;
     for (const auto& code : codes) {
-        complexity += minseqlen(code, 25 + 1) * stoi(code.substr(0, 3));
+        complexity += dfs(code, 25 + 1) * stoi(code.substr(0, 3));
     }
     cout << complexity << endl;
 }
